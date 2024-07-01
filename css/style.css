@@ -86,6 +86,7 @@ body {
     -moz-transition: all .6s ease;
     -o-transtion: all .6s ease;
     -ms-transition: all .6s ease;
+    transition: all .6s ease;
 }
 
 .nav-side-menu ul .sub-menu li.active, .nav-side-menu li .sub-menu li.active {
@@ -152,7 +153,7 @@ body {
 
 @media (min-width: 767px) {
     /* nav - menu */
-    .nav-side-menu .menu-list .meun-content {
+    .nav-side-menu .menu-list .menu-content {
         display: block;
     }
 }
