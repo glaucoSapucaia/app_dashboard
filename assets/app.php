@@ -50,11 +50,66 @@
             $this->conexao = $conexao->conectar();
             $this->dashboard = $dashboard;
         }
+
+        // numero vendas data
+        public function getNumVendas() {
+            $query = '
+                SELECT
+                    count(*) as num_vendas
+                FROM
+                    tb_vendas
+                WHERE
+                    data_venda BETWEEN :data_inicio and :data_fim
+            ';
+
+            $stmt = $this->conexao->prepare($query);
+
+            // Recuperando valores do dashboard
+            $stmt->bindValue(':data_inicio', $this->dashboard->__get('data_inicio'));
+            $stmt->bindValue(':data_fim', $this->dashboard->__get('data_fim'));
+
+            $stmt->execute();
+
+            // Retornamos um objeto, mas focamos apenas em seu valor
+            return $stmt->fetch(PDO::FETCH_OBJ)->num_vendas;
+        }
+
+        // total vendas data
+        public function getTotalVendas() {
+            $query = '
+                SELECT
+                    SUM(total) as total_vendas
+                FROM
+                    tb_vendas
+                WHERE
+                    data_venda BETWEEN :data_inicio and :data_fim
+            ';
+
+            $stmt = $this->conexao->prepare($query);
+
+            // Recuperando valores do dashboard
+            $stmt->bindValue(':data_inicio', $this->dashboard->__get('data_inicio'));
+            $stmt->bindValue(':data_fim', $this->dashboard->__get('data_fim'));
+
+            $stmt->execute();
+
+            // Retornamos um objeto, mas focamos apenas em seu valor
+            return $stmt->fetch(PDO::FETCH_OBJ)->total_vendas;
+        }
     }
 
     // instancias
     $dashboard = new Dashboard();
     $conexao = new Conexao();
     $db = new Db($conexao, $dashboard);
+
+    // Atribuindo valores do DB ao dashboard
+    $dashboard->__set('data_inicio', '2018-10-01');
+    $dashboard->__set('data_fim', '2018-10-31');
+
+    $dashboard->__set('numero_vendas', $db->getNumVendas());
+    $dashboard->__set('total_vendas', $db->getTotalVendas());
+
+    print_r($dashboard);
     
 ?>
