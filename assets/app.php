@@ -5,6 +5,8 @@
         public $data_fim;
         public $numero_vendas;
         public $total_vendas;
+        public $clientes_ativos;
+        public $clientes_inativos;
 
         public function __get($attr) {
             return $this->$attr;
@@ -96,6 +98,23 @@
             // Retornamos um objeto, mas focamos apenas em seu valor
             return $stmt->fetch(PDO::FETCH_OBJ)->total_vendas;
         }
+
+        // clientes ativos | inativos
+        public function getClientesAtivos() {
+            $query = '
+                SELECT
+                    COUNT(*) as total_clientes_ativos
+                FROM
+                    tb_clientes as tb_c
+                WHERE
+                    tb_c.cliente_ativo = 1
+            ';
+
+            $stmt = $this->conexao->prepare($query);
+            $stmt->execute();
+
+            return $stmt->fetch(PDO::FETCH_OBJ)->total_clientes_ativos;
+        }
     }
 
     // instancias
@@ -123,6 +142,7 @@
 
     $dashboard->__set('numero_vendas', $db->getNumVendas());
     $dashboard->__set('total_vendas', $db->getTotalVendas());
+    $dashboard->__set('clientes_ativos', $db->getClientesAtivos());
 
     // print_r($dashboard);
     // print_r($ano . '/' . $mes . '/' . $dias_do_mes);
