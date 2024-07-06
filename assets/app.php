@@ -101,15 +101,34 @@
     // instancias
     $dashboard = new Dashboard();
     $conexao = new Conexao();
+
+    // resgatando competencia do front end
+    // explode() -> Usamos apra separar ano e mês a partir do caractere '-'
+    $competencia = explode('-', $_GET['competencia']);
+    $ano = $competencia[0];
+    $mes = $competencia[1];
+
+    // Formando janela de dias num mês
+    // cal_days_in_month() -> Calcula qtd de dias num Mês
+    // param 1 -> opção de calendario
+    // param 2 -> mes selecionado
+    // param 3 -> ano selecionado
+    $dias_do_mes = cal_days_in_month(CAL_GREGORIAN, $mes, $ano);
+
     $db = new Db($conexao, $dashboard);
 
     // Atribuindo valores do DB ao dashboard
-    $dashboard->__set('data_inicio', '2018-10-01');
-    $dashboard->__set('data_fim', '2018-10-31');
+    $dashboard->__set('data_inicio', $ano . '-' . $mes . '-01');
+    $dashboard->__set('data_fim', $ano . '-' . $mes . '-' . $dias_do_mes);
 
     $dashboard->__set('numero_vendas', $db->getNumVendas());
     $dashboard->__set('total_vendas', $db->getTotalVendas());
 
-    print_r($dashboard);
+    // print_r($dashboard);
+    // print_r($ano . '/' . $mes . '/' . $dias_do_mes);
+
+    // Após configurar o dataType da request AJAX, precisamo converter os dados.
+    // json_encode() -> Converte dados para o tipo json
+    echo json_encode($dashboard);
     
 ?>
