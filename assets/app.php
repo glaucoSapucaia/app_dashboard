@@ -115,6 +115,22 @@
 
             return $stmt->fetch(PDO::FETCH_OBJ)->total_clientes_ativos;
         }
+
+        public function getClientesInativos() {
+            $query = '
+                SELECT
+                    COUNT(*) as total_clientes_inativos
+                FROM
+                    tb_clientes as tb_c
+                WHERE
+                    tb_c.cliente_ativo = 0
+            ';
+
+            $stmt = $this->conexao->prepare($query);
+            $stmt->execute();
+
+            return $stmt->fetch(PDO::FETCH_OBJ)->total_clientes_inativos;
+        }
     }
 
     // instancias
@@ -143,6 +159,7 @@
     $dashboard->__set('numero_vendas', $db->getNumVendas());
     $dashboard->__set('total_vendas', $db->getTotalVendas());
     $dashboard->__set('clientes_ativos', $db->getClientesAtivos());
+    $dashboard->__set('clientes_inativos', $db->getClientesInativos());
 
     // print_r($dashboard);
     // print_r($ano . '/' . $mes . '/' . $dias_do_mes);
