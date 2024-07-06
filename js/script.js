@@ -69,6 +69,9 @@ $(document).ready(() => {
                     $('#total_vendas').html(dados.total_vendas);
                     $('#clientes_ativos').html(dados.clientes_ativos);
                     $('#clientes_inativos').html(dados.clientes_inativos)
+                    $('#reclamacoes').html(dados.reclamacoes);
+                    $('#elogios').html(dados.elogios);
+                    $('#sugestoes').html(dados.sugestoes);
 
                     // console.log(dados.numero_vendas, dados.total_vendas);
                 },

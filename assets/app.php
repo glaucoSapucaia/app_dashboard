@@ -7,6 +7,9 @@
         public $total_vendas;
         public $clientes_ativos;
         public $clientes_inativos;
+        public $reclamacoes;
+        public $elogios;
+        public $sugestoes;
 
         public function __get($attr) {
             return $this->$attr;
@@ -131,6 +134,55 @@
 
             return $stmt->fetch(PDO::FETCH_OBJ)->total_clientes_inativos;
         }
+
+        // reclamacoes, elogios e sugestoes
+        public function getReclamacoes() {
+            $query = '
+                SELECT
+                    COUNT(*) as total_reclamacoes
+                FROM
+                    tb_contatos as tb_c
+                WHERE
+                    tb_c.tipo_contato = 1
+            ';
+
+            $stmt = $this->conexao->prepare($query);
+            $stmt->execute();
+
+            return $stmt->fetch(PDO::FETCH_OBJ)->total_reclamacoes;
+        }
+
+        public function getElogios() {
+            $query = '
+                SELECT
+                    COUNT(*) as total_elogios
+                FROM
+                    tb_contatos as tb_c
+                WHERE
+                    tb_c.tipo_contato = 2
+            ';
+
+            $stmt = $this->conexao->prepare($query);
+            $stmt->execute();
+
+            return $stmt->fetch(PDO::FETCH_OBJ)->total_elogios;
+        }
+
+        public function getSugestoes() {
+            $query = '
+                SELECT
+                    COUNT(*) as total_sugestoes
+                FROM
+                    tb_contatos as tb_c
+                WHERE
+                    tb_c.tipo_contato = 3
+            ';
+
+            $stmt = $this->conexao->prepare($query);
+            $stmt->execute();
+
+            return $stmt->fetch(PDO::FETCH_OBJ)->total_sugestoes;
+        }
     }
 
     // instancias
@@ -160,6 +212,9 @@
     $dashboard->__set('total_vendas', $db->getTotalVendas());
     $dashboard->__set('clientes_ativos', $db->getClientesAtivos());
     $dashboard->__set('clientes_inativos', $db->getClientesInativos());
+    $dashboard->__set('reclamacoes', $db->getReclamacoes());
+    $dashboard->__set('elogios', $db->getElogios());
+    $dashboard->__set('sugestoes', $db->getSugestoes());
 
     // print_r($dashboard);
     // print_r($ano . '/' . $mes . '/' . $dias_do_mes);
