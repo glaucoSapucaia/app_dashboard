@@ -72,6 +72,7 @@ $(document).ready(() => {
                     $('#reclamacoes').html(dados.reclamacoes);
                     $('#elogios').html(dados.elogios);
                     $('#sugestoes').html(dados.sugestoes);
+                    $('#despesas').html(dados.despesas);
 
                     // console.log(dados.numero_vendas, dados.total_vendas);
                 },

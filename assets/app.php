@@ -10,6 +10,7 @@
         public $reclamacoes;
         public $elogios;
         public $sugestoes;
+        public $despesas;
 
         public function __get($attr) {
             return $this->$attr;
@@ -183,6 +184,26 @@
 
             return $stmt->fetch(PDO::FETCH_OBJ)->total_sugestoes;
         }
+
+        // Despesas
+        public function getDespesas() {
+            $query = '
+            SELECT
+                SUM(total) as total_despesas
+            FROM
+                tb_despesas
+            WHERE
+                data_despesa BETWEEN :data_inicio AND :data_fim
+            ';
+
+            $stmt = $this->conexao->prepare($query);
+            $stmt->bindValue(':data_inicio', $this->dashboard->__get('data_inicio'));
+            $stmt->bindValue(':data_fim', $this->dashboard->__get('data_fim'));
+
+            $stmt->execute();
+
+            return $stmt->fetch(PDO::FETCH_OBJ)->total_despesas;
+        }
     }
 
     // instancias
@@ -215,6 +236,7 @@
     $dashboard->__set('reclamacoes', $db->getReclamacoes());
     $dashboard->__set('elogios', $db->getElogios());
     $dashboard->__set('sugestoes', $db->getSugestoes());
+    $dashboard->__set('despesas', $db->getDespesas());
 
     // print_r($dashboard);
     // print_r($ano . '/' . $mes . '/' . $dias_do_mes);
